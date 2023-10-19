@@ -17,3 +17,5 @@ Cargo.lock
 clean-cyn.tar.gz
 main.js
 package.json
+package-lock.json
+node_modules

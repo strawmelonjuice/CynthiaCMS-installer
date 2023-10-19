@@ -2,6 +2,7 @@ use inline_colorization::*;
 use normalize_path::NormalizePath;
 use rand::Rng;
 use std::fs::File;
+use std::process;
 use fs_extra::dir::copy;
 use fs_extra::dir::CopyOptions;
 use flate2::read::GzDecoder;
@@ -12,7 +13,6 @@ use std::{
     path::Path,
 };
 const VERSION: &str = env!("CARGO_PKG_VERSION");
-const TOTALSTEPS: i32 = 5;
 
 
 
@@ -23,6 +23,13 @@ pub const NPM: &'static str = "npm.cmd";
 pub const NPM: &'static str = "npm";
 
 fn main() {
+    if env::args().nth(1).unwrap_or("unset".to_string()) != "-p".to_string() {defaultmode();
+    }
+
+}
+
+fn defaultmode() {
+    const TOTALSTEPS: i32 = 6;
     let cynthiapkg = format!(
         "@cynthiacms/cynthiacms@{0}",
         env::args().nth(1).unwrap_or("latest".to_string())
@@ -86,6 +93,12 @@ fn main() {
     println!("\r[4/{TOTALSTEPS}] Pruning unpacked files...");
     fs::remove_file(cynthiareadme).unwrap();
     println!("\r[5/{TOTALSTEPS}] Copying Cynthia files into current directory...");
+    println!("\r[6/{TOTALSTEPS}] Installing Cynthia dependencies...");
     copy(packagedir, cd, &options).expect("Could not create target files.");
+     Command::new(NPM)
+        .arg("install")
+        .output()
+        .expect("Could not find NPM.");
     println!("\r...Complete!");
+    process::exit(0);
 }
