@@ -2,6 +2,7 @@ use inline_colorization::*;
 use normalize_path::NormalizePath;
 use rand::Rng;
 use std::fs::File;
+use std::io::Read;
 use std::process;
 use fs_extra::dir::copy;
 use fs_extra::dir::CopyOptions;
@@ -12,9 +13,16 @@ use std::{
     fs::{self},
     path::Path,
 };
+use serde::{Deserialize, Serialize};
+
+
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
-
+#[derive(Deserialize, Debug, Serialize)]
+struct Cynthiapluginrepoi {
+    host: String,
+    referrer: String
+}
 
 #[cfg(windows)]
 pub const NPM: &'static str = "npm.cmd";
@@ -23,9 +31,9 @@ pub const NPM: &'static str = "npm.cmd";
 pub const NPM: &'static str = "npm";
 
 fn main() {
-    if env::args().nth(1).unwrap_or("unset".to_string()) != "-p".to_string() {defaultmode();
+    if (env::args().nth(1).unwrap_or("unset".to_string())) != "-p".to_string() {defaultmode();
     }
-
+    pluginmode();
 }
 
 fn defaultmode() {
@@ -101,4 +109,50 @@ fn defaultmode() {
         .expect("Could not find NPM.");
     println!("\r...Complete!");
     process::exit(0);
+}
+fn pluginmode () {
+    const TOTALSTEPS: i32 = 7;
+    println!("\r[1/{TOTALSTEPS}] Creating temporary directories...");
+    let mut rng = rand::thread_rng();
+    let tempdir = Path::new(&format!(
+        "{0}/{1}_cyninstdir/",
+        env::temp_dir().display(),
+        rng.gen_range(10000000..999999999)
+    ))
+    .normalize();
+    fs::create_dir_all((&tempdir).as_path()).unwrap();
+
+    println!("\r[2/{TOTALSTEPS}] Downloading Cynthia Plugin Index...");
+    let resp = reqwest::blocking::get("https://raw.githubusercontent.com/strawmelonjuice/CynthiaCMS-installer/main/cynthia-plugin-repository.json").expect("request failed");
+    let body = resp.bytes().expect("body invalid");
+
+
+    let repositoryfile = format!(
+        "{}",
+        Path::new(&format!("{0}/cynthia-plugin-repository.json", tempdir.display()))
+            .normalize()
+            .display()
+    );
+
+    std::fs::write(&repositoryfile, &body).expect("failed to download Cynthia Plugin Index.");
+
+    print!("\r[3/{TOTALSTEPS}] Loading Cynthia Plugin Index...");
+    let cynplind = load_repo(repositoryfile);
+    // Todo: Finish me, what can we do with cynplind now that it's loaded into memory?
+}
+
+fn load_repo(file: String) -> Vec<Cynthiapluginrepoi> {
+    let unparsed: &str = &from_file(file.as_str()).as_str();
+    let parsed:Vec<Cynthiapluginrepoi>  =
+        serde_json::from_str(unparsed).expect("Could not read from Cynthia Plugin Index");
+    return parsed;
+}
+fn from_file(file: &str) -> String {
+    // Stole my own Bananen code here. Sorry not sorry.
+    let expectationerror = format!("{color_red}ERROR:{color_reset} Looks like '{file}' isn't what I expected. I expected a file there.");
+    let mut o = File::open(file).expect(&expectationerror);
+    let mut contents = String::new();
+    let expectationerror = format!("{color_red}ERROR:{color_reset} Looks like '{file}' isn't what I expected. I could not read that file.");
+    o.read_to_string(&mut contents).expect(&expectationerror);
+    return contents;
 }
