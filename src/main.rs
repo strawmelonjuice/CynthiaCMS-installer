@@ -5,12 +5,7 @@ use inline_colorization::*;
 use normalize_path::NormalizePath;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
-use std::env::join_paths;
-use std::env::Args;
-use std::env::ArgsOs;
-use std::fmt::format;
 use std::fs::File;
-use std::io::empty;
 use std::io::Read;
 use std::process;
 use std::{env, process::Command};
@@ -20,6 +15,7 @@ use std::{
 };
 use tar::Archive;
 
+const PLUGIN_REPO_URL: &str = "https://cdn.jsdelivr.net/gh/strawmelonjuice/CynthiaCMS-installer@main/cynthia-plugin-repository.json";
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Deserialize, Debug, Serialize)]
@@ -132,13 +128,13 @@ fn defaultmode(cynthiapkg: String) {
         .current_dir(&cd)
         .output()
         .expect("Could not find NPM.");
-    print!(
-        "\r...{color_green}Complete!"
-    );
+    print!("\r...{color_green}Complete!");
     let pluginmanjson = Path::new(&format!("{0}/cynthiapmanifest.json", &cd.display())).normalize();
     if pluginmanjson.exists() {
-        println!(" {color_blue}Installing plugins specified in {color_magenta}'{0}'{color_blue} now...{color_reset}",
-    pluginmanjson.display());
+        println!(
+            " {color_blue}Installing plugins specified in {color_magenta}'{0}'{color_blue} now...{color_reset}",
+            pluginmanjson.display()
+        );
         let mut o = File::open(format!("{}", &pluginmanjson.display()).as_str())
             .expect("Could not read Cynthia plugin manifest file.");
         let mut contents = String::new();
@@ -147,15 +143,21 @@ fn defaultmode(cynthiapkg: String) {
         let unparsed: &str = &contents.as_str();
         let cynplmn: Vec<CynthiaPluginManifestItem> = serde_json::from_str(unparsed)
             .expect("Could not read from Cynthia plugin manifest file.");
+        // let mut totalplugins: i32 = 0;
+        let totalplugins: &usize = &cynplmn.len();
+        let mut currentplugin: i32 = 1;
+        // for _plugin in cynplmn { totalplugins +=1 }
         for plugin in cynplmn {
+            println!(
+                "Installing plugin {0}/{1}: {2}",
+                currentplugin, totalplugins, plugin.id
+            );
             pluginmode(plugin.id, plugin.version);
+            currentplugin += 1;
         }
-
     }
-        println!(" {color_cyan}Bye!");
+    println!(" {color_cyan}Bye!");
 
-
-    
     process::exit(0);
 }
 
@@ -179,7 +181,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
     fs::create_dir_all((&tempdir).as_path()).unwrap();
 
     println!("\r[2/{TOTALSTEPS}] Downloading Cynthia Plugin Index...");
-    let resp = reqwest::blocking::get("https://raw.githubusercontent.com/strawmelonjuice/CynthiaCMS-installer/main/cynthia-plugin-repository.json").expect("request failed");
+    let resp = reqwest::blocking::get(PLUGIN_REPO_URL).expect("request failed");
     let body = resp.bytes().expect("body invalid");
 
     let repositoryfile = format!(
