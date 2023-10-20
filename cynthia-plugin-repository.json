@@ -1,6 +1,7 @@
-{
-    "hlimg": {
+[
+    {
+        "id": "hlimg",
         "host": "NPM",
         "referrer": "@cynthiacms/hlimg-cynthia"
     }
-}
+]
