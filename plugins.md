@@ -13,7 +13,7 @@ If you want that version to be '`latest`', you can omit the version parameter.
 | Plug-in ID                    |                                                      `hlimg` |
 | :---------------------------- | -----------------------------------------------------------: |
 | Author                        |                                                 MLC Bloeiman |
-| Source code                   | GitHub: <https://github.com/strawmelonjuice/hlimg-cynthiacms/> |
+| Source code                   | GitHub: <https://github.com/strawmelonjuice/hlimg-cynthiacms/>; NPM: <https://www.npmjs.com/package/hl-img> |
 | License                       |                                                          MIT |
 | Cynthia Plugin Loader version |                                                          `1` |
 
@@ -27,4 +27,4 @@ cyninst -p hlimg 1
 
 #### About
 
-Allows you to use [HL-IMG](https://github.com/strawmelonjuice/hlimg/) in Cynthia-hosted pages and posts globally, without the need to edit template files or entering HTML.
+Allows you to use [`hl-img`](https://www.npmjs.com/package/hl-img?activeTab=readme) in Cynthia-hosted pages and posts globally, without the need to edit template files or entering HTML.
