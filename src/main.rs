@@ -196,7 +196,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
 
     std::fs::write(&repositoryfile, &body).expect("failed to download Cynthia Plugin Index.");
 
-    print!("\r[3/{TOTALSTEPS}] Loading Cynthia Plugin Index...");
+    println!("\r[3/{TOTALSTEPS}] Loading Cynthia Plugin Index...");
 
     let mut o = File::open(&repositoryfile.as_str()).expect("Could not read Cynthia Plugin Index.");
     let mut contents = String::new();
