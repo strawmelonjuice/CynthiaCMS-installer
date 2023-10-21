@@ -1,7 +1,13 @@
 [package]
 name = "cyninst"
-version = "0.1.0"
+description = "Cynthia-CMS installation manager"
+version = "0.1.0-alpha"
 edition = "2021"
+authors = ["MLC Bloeiman <mar@strawmelonjuice.com>"]
+license = "GPL-3.0-or-later"
+readme = "README.md"
+repository = "https://github.com/strawmelonjuice/CynthiaCMS-installer/"
+keywords = ["cli", "package-manager", "cynthiacms"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
