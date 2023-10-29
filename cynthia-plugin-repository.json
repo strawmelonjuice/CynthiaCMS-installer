@@ -3,5 +3,10 @@
         "id": "hlimg",
         "host": "NPM",
         "referrer": "@cynthiacms/hlimg-cynthia"
+    },
+    {
+        "id": "htmx",
+        "host": "NPM",
+        "referrer": "@cynthiacms/htmx-cynthia"
     }
 ]
