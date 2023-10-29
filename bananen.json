@@ -1,0 +1,53 @@
+{
+  "main": {
+    "bananen_version": "0.1.7-beta2",
+    "bananendata_version": 3
+  },
+  "config": {
+    "changelogfile": "cyninst-changelog.md",
+    "rollingrelease": false,
+    "customisation": {
+      "log_name": "Cyninst - Changelog",
+      "released_name": "Releases",
+      "unreleased_name": "Unreleased changes",
+      "changetypes": {
+        "addition": {
+          "translation": "Addition",
+          "color": "#336600"
+        },
+        "removal": {
+          "translation": "Removal",
+          "color": "#ff0000"
+        },
+        "update": {
+          "translation": "Update",
+          "color": "#0033cc"
+        },
+        "fix": {
+          "translation": "Fix",
+          "color": "#9900cc"
+        }
+      }
+    }
+  },
+  "saved_changes": {
+    "unreleased": [],
+    "released": [
+      {
+        "name": "0.1.1",
+        "changes": [
+          {
+            "contents": "Dropped the `-beta` on version tags, to make `cargo install cyninst` easier.",
+            "type": 2,
+            "breaking": false
+          },
+          {
+            "contents": " now installs only production dependencies by default. Spares some of you disk space!",
+            "type": 2,
+            "breaking": false
+          }
+        ]
+      }
+    ]
+  }
+}
