@@ -125,6 +125,7 @@ fn defaultmode(cynthiapkg: String) {
     println!("\r[7/{TOTALSTEPS}] Installing Cynthia dependencies...");
     Command::new(NPM)
         .arg("install")
+        .arg("--production")
         .current_dir(&cd)
         .output()
         .expect("Could not find NPM.");
@@ -293,6 +294,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
     println!("\r[10/{TOTALSTEPS}] Installing dependencies for this plugin...");
     Command::new(NPM)
         .arg("install")
+        .arg("--production")
         .current_dir(pdp)
         .output()
         .expect("Could not find NPM.");
