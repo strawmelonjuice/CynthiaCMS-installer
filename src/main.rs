@@ -38,18 +38,8 @@ pub const NPM: &'static str = "npm.cmd";
 pub const NPM: &'static str = "npm";
 
 fn main() {
-    println!("{style_bold}{color_cyan}Cynthia Directory Downloader -- cyninst{color_reset} v{VERSION}\n{style_reset}By {color_red}Straw{color_green}melon{color_yellow}juice {color_magenta}Mar{color_reset}.");
-    println!(
-        r#"
-Installs Cynthia into the current directory.
-    Usage: 
-            {color_yellow}cyninst <[version]>{color_reset}
-    
-    or, for plugins:
-
-            {color_yellow}cyninst -p <plugin name> <[plugin version]>{color_reset}
-"#
-    );
+    println!("{style_bold}{color_cyan}Cynthia Directory Downloader -- cyninst{color_reset} v{VERSION}\n\t{style_reset}By {color_red}Straw{color_green}melon{color_yellow}juice {color_magenta}Mar{color_reset}.");
+    println!("\nInstalls Cynthia into the current directory.\n\n\tUsage: \n\n\t\t{color_yellow}cyninst <[version]>{color_reset}\n\n\n\tor, for plugins:\n\n\n\t\t{color_yellow}cyninst -p <plugin name> <[plugin version]>{color_reset}\n");
     if (env::args().nth(1).unwrap_or("unset".to_string())) != "-p".to_string() {
         defaultmode(format!(
             "@cynthiacms/cynthiacms@{0}",
@@ -68,7 +58,7 @@ fn defaultmode(cynthiapkg: String) {
         "\n\n\n\n\r─────────────────────────────────────{0}─────────────────────────────────────",
         "Installing Cynthia"
     );
-    println!("\n\r[1/{TOTALSTEPS}] Asking NPM where the specified Cynthia tarball can be found...");
+    println!("\n\r[1/{TOTALSTEPS}]\tAsking NPM where the specified Cynthia tarball can be found...");
     let output = Command::new(NPM)
         .arg("view")
         .arg(cynthiapkg)
@@ -98,31 +88,30 @@ fn defaultmode(cynthiapkg: String) {
             .normalize()
             .display()
     );
-    println!("\r[2/{TOTALSTEPS}] Downloading to '{}'...", tarballfilepath);
+    println!("\r[2/{TOTALSTEPS}]\tDownloading to '{}'...", tarballfilepath);
     let resp = reqwest::blocking::get(tarballurl.as_str()).expect("request failed");
     let body = resp.bytes().expect("body invalid");
     std::fs::write(&tarballfilepath, &body).expect("failed to download Cynthia.");
 
-    println!("\r[3/{TOTALSTEPS}] Download completed, unpacking...");
+    println!("\r[3/{TOTALSTEPS}]\tDownload completed, unpacking...");
 
     let tar_gz = File::open((&tarballfilepath).as_str()).expect("Could not unpack Cynthia.");
     let tar = GzDecoder::new(tar_gz);
     let mut archive = Archive::new(tar);
     archive.unpack(&tempdir).expect("Could not unpack Cynthia.");
-    let packagedir = Path::new(&format!("{0}/package", &tempdir.display())).normalize();
-    let cynthiareadme =
-        Path::new(&format!("{0}/package/README.MD", &tempdir.display())).normalize();
+    let packagedir = Path::new(&format!("{0}/package", &tempdir.display())).normalize();        
     let cd = env::current_dir().unwrap();
     let mut options = CopyOptions::new();
     options.overwrite = true;
     options.content_only = true;
-    println!("\r[4/{TOTALSTEPS}] Pruning unpacked files...");
-    fs::remove_file(cynthiareadme).unwrap();
-    println!("\r[5/{TOTALSTEPS}] Copying Cynthia files into current directory...");
+    println!("\r[4/{TOTALSTEPS}]\tPruning unpacked files...");
+    fs::remove_file(Path::new(&format!("{0}/package/README.MD", &tempdir.display())).normalize()).unwrap();
+    fs::remove_file(Path::new(&format!("{0}/package/bananen.json", &tempdir.display())).normalize()).unwrap();
+    println!("\r[5/{TOTALSTEPS}]\tCopying Cynthia files into current directory...");
     copy(packagedir, &cd, &options).expect("Could not create target files.");
-    println!("\r[6/{TOTALSTEPS}] Cleaning temp files...");
+    println!("\r[6/{TOTALSTEPS}]\tCleaning temp files...");
     fs::remove_dir_all(tempdir).unwrap();
-    println!("\r[7/{TOTALSTEPS}] Installing Cynthia dependencies...");
+    println!("\r[7/{TOTALSTEPS}]\tInstalling Cynthia dependencies...");
     Command::new(NPM)
         .arg("install")
         .arg("--production")
@@ -171,7 +160,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
         println!("{color_red}ERROR:{color_reset} No plugin selected.")
     }
     const TOTALSTEPS: i32 = 10;
-    println!("\r[1/{TOTALSTEPS}] Creating temporary directories...");
+    println!("\r[1/{TOTALSTEPS}]\tCreating temporary directories...");
     let mut rng = rand::thread_rng();
     let tempdir = Path::new(&format!(
         "{0}/{1}_cyninstdir/",
@@ -181,7 +170,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
     .normalize();
     fs::create_dir_all((&tempdir).as_path()).unwrap();
 
-    println!("\r[2/{TOTALSTEPS}] Downloading Cynthia Plugin Index...");
+    println!("\r[2/{TOTALSTEPS}]\tDownloading Cynthia Plugin Index...");
     let resp = reqwest::blocking::get(PLUGIN_REPO_URL).expect("request failed");
     let body = resp.bytes().expect("body invalid");
 
@@ -197,7 +186,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
 
     std::fs::write(&repositoryfile, &body).expect("failed to download Cynthia Plugin Index.");
 
-    println!("\r[3/{TOTALSTEPS}] Loading Cynthia Plugin Index...");
+    println!("\r[3/{TOTALSTEPS}]\tLoading Cynthia Plugin Index...");
 
     let mut o = File::open(&repositoryfile.as_str()).expect("Could not read Cynthia Plugin Index.");
     let mut contents = String::new();
@@ -206,7 +195,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
     let unparsed: &str = &contents.as_str();
     let cynplind: Vec<CynthiaPluginRepoItem> =
         serde_json::from_str(unparsed).expect("Could not read from Cynthia Plugin Index");
-    println!("[4/{TOTALSTEPS}] Searching Cynthia plugin index for '{wantedplugin}'...");
+    println!("[4/{TOTALSTEPS}]\tSearching Cynthia plugin index for '{wantedplugin}'...");
     let mut wantedpkg: &CynthiaPluginRepoItem = &CynthiaPluginRepoItem {
         id: "none".to_string(),
         host: "none".to_string(),
@@ -214,7 +203,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
     };
     for cynplug in &cynplind {
         if cynplug.id == wantedplugin {
-            print!("\r          {color_magenta}Found!{color_reset}");
+            print!("\r\t\t{color_magenta}Found!{color_reset}");
             wantedpkg = cynplug;
             break;
         }
@@ -230,7 +219,7 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
             " --> Cynthia Plugin Index: {0} is on NPM as {1}!",
             wantedplugin, wantedpkg.referrer
         );
-        println!("[5/{TOTALSTEPS}] Asking NPM about this...");
+        println!("[5/{TOTALSTEPS}]\tAsking NPM about this...");
         let npmpackagename = format!("{1}@{0}", wantedpluginv, wantedpkg.referrer);
         let output = Command::new(NPM)
             .arg("view")
@@ -262,20 +251,20 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
             .display()
     );
     println!(
-        "\r[6/{TOTALSTEPS}] Downloading {1} to '{0}'...",
+        "\r[6/{TOTALSTEPS}]\tDownloading {1} to '{0}'...",
         tarballfilepath, wantedplugin
     );
     let resp = reqwest::blocking::get(tarballurl.as_str()).expect("request failed");
     let body = resp.bytes().expect("body invalid");
     std::fs::write(&tarballfilepath, &body).expect("failed to download plugin package.");
-    println!("\r[7/{TOTALSTEPS}] Download completed, unpacking...");
+    println!("\r[7/{TOTALSTEPS}]\tDownload completed, unpacking...");
 
     let tar_gz = File::open((&tarballfilepath).as_str()).expect("Could not unpack plugin.");
     let tar = GzDecoder::new(tar_gz);
     let mut archive = Archive::new(tar);
     archive.unpack(&tempdir).expect("Could not unpack plugin.");
 
-    print!("\r[8/{TOTALSTEPS}] Success! installing plugin to: ");
+    print!("\r[8/{TOTALSTEPS}]\tSuccess! installing plugin to: ");
     let packagedir = Path::new(&format!("{0}/package", &tempdir.display())).normalize();
     let mut options = CopyOptions::new();
     options.overwrite = true;
@@ -289,14 +278,14 @@ fn pluginmode(wantedplugin: String, wantedpluginv: String) {
     let pdp = format!("{0}/{1}", pd.display(), wantedplugin);
     fs::create_dir_all(&pdp).expect("Could not create plugin folders.");
     copy(packagedir, &pdp, &options).expect("Could not create target files.");
-    println!("\r[9/{TOTALSTEPS}] Cleaning temp files...");
+    println!("\r[9/{TOTALSTEPS}]\tCleaning temp files...");
     fs::remove_dir_all(tempdir).unwrap();
-    println!("\r[10/{TOTALSTEPS}] Installing dependencies for this plugin...");
+    println!("\r[10/{TOTALSTEPS}]\tInstalling dependencies for this plugin...");
     Command::new(NPM)
         .arg("install")
         .arg("--production")
         .current_dir(pdp)
         .output()
         .expect("Could not find NPM.");
-    println!("\r...{color_green}Complete!");
+    println!("\r...{color_green}Complete!{color_reset}");
 }

@@ -21,3 +21,8 @@ package-lock.json
 node_modules
 plugins
 cynthiapmanifest.json
+*.ts
+*.js
+changelog.md
+tsconfig.json
+dist/main.js.map
