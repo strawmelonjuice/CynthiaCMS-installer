@@ -42,13 +42,13 @@ Allows you to use [`hl-img`](https://www.npmjs.com/package/hl-img?activeTab=read
 #### Installation: 
 
 ```bash
-cyninst -p htmx
+
 ```
 
 ##### With Cyninst:
 
 ```bash
-cyninst -p hlimg 1
+cyninst -p htmx
 ```
 
 #### About
