@@ -35,8 +35,8 @@ Allows you to use [`hl-img`](https://www.npmjs.com/package/hl-img?activeTab=read
 | Plug-in ID                    |                                                      `htmx` |
 | :---------------------------- | -----------------------------------------------------------: |
 | Author                        |                                                 MLC Bloeiman (loader plugin); 'Big Sky Software' (HTMX)|
-| Source code                   | GitHub: <https://github.com/strawmelonjuice/hlimg-cynthiacms/>; NPM: <https://www.npmjs.com/package/hl-img> |
-| License                       |                                                           MIT (loader plugin); [BSD 2-Clause "Simplified" License](https://github.com/bigskysoftware/htmx/blob/master/LICENSE) (htmx)|
+| Source code                   | GitHub: <https://github.com/strawmelonjuice/htmx-cynthiacms/> |
+| License                       |                                                           MIT (loader plugin); [BSD 2-Clause "Simplified" License](https://github.com/bigskysoftware/htmx/blob/master/LICENSE) (htmx) |
 | Cynthia Plugin Loader version |                                                          `1` |
 
 #### Installation: 
