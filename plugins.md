@@ -28,3 +28,29 @@ cyninst -p hlimg 1
 #### About
 
 Allows you to use [`hl-img`](https://www.npmjs.com/package/hl-img?activeTab=readme) in Cynthia-hosted pages and posts globally, without the need to edit template files or entering HTML.
+
+
+### HTMX Cynthia plugin
+
+| Plug-in ID                    |                                                      `htmx` |
+| :---------------------------- | -----------------------------------------------------------: |
+| Author                        |                                                 MLC Bloeiman (loader plugin); 'Big Sky Software' (HTMX)|
+| Source code                   | GitHub: <https://github.com/strawmelonjuice/hlimg-cynthiacms/>; NPM: <https://www.npmjs.com/package/hl-img> |
+| License                       |                                                           MIT (loader plugin); [BSD 2-Clause "Simplified" License](https://github.com/bigskysoftware/htmx/blob/master/LICENSE) (htmx)|
+| Cynthia Plugin Loader version |                                                          `1` |
+
+#### Installation: 
+
+```bash
+cyninst -p htmx
+```
+
+##### With Cyninst:
+
+```bash
+cyninst -p hlimg 1
+```
+
+#### About
+
+Allows you to use [`hl-img`](https://www.npmjs.com/package/hl-img?activeTab=readme) in Cynthia-hosted pages and posts globally, without the need to edit template files or entering HTML.
