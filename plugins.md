@@ -53,4 +53,4 @@ cyninst -p hlimg 1
 
 #### About
 
-Allows you to use [`hl-img`](https://www.npmjs.com/package/hl-img?activeTab=readme) in Cynthia-hosted pages and posts globally, without the need to edit template files or entering HTML.
+Allows you to use [`htmx`](https://htmx.org/) in Cynthia-hosted pages and posts globally, without the need to edit template files.
