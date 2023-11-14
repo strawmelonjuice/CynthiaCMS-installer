@@ -8,5 +8,9 @@
         "id": "htmx",
         "host": "NPM",
         "referrer": "@cynthiacms/htmx-cynthia"
-    }
+    },
+    {
+        "id": "gfonts".
+        "host": "NPM",
+        "referrer": "@cynthiacms/gfonts"
 ]
